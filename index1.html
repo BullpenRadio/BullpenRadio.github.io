@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Spotify Playlist</title>
+</head>
+<body>
+    <div id="spotify-player-container"></div>
+
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        // Initialize the Spotify Web Playback SDK
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const token = 'YOUR_ACCESS_TOKEN'; // Replace with your actual access token
+
+            const player = new Spotify.Player({
+                name: 'My Spotify Player',
+                getOAuthToken: callback => callback(token),
+                volume: 0.5
+            });
+
+            // Connect to the player
+            player.connect().then(success => {
+                if (success) {
+                    console.log('Connected to the Spotify player');
+                }
+            });
+
+            // Add event listeners for playback control
+            player.addListener('ready', ({ device_id }) => {
+                console.log('Device ID', device_id);
+                // Play a track
+                player.queue({
+                    uri: 'spotify:track:SPOTIFY_TRACK_URI'
+                });
+            });
+
+            player.addListener('player_state_changed', state => {
+                // Handle player state changes (play/pause/track change)
+                console.log('Player state', state);
+            });
+
+            // Add more event listeners as needed
+        };
+    </script>
+</body>
+</html>
